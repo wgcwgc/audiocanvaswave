@@ -36,7 +36,7 @@ public class MainActivity extends Activity
 	private int recBufSize;// 录音最小buffer大小
 	private AudioRecord audioRecord;
 	private WaveCanvas waveCanvas;
-	private String mFileName = "test";// 文件名
+	private String mFileName = "wgcwgc";// 文件名
 
 	WaveSurfaceView waveSfv;
 	private Button switchBtn;
@@ -113,11 +113,9 @@ public class MainActivity extends Activity
 				float sim = 0;
 				try
 				{
-					// new FileInputStream(new File(DATA_DIRECTORY + mFileName +
-					// ".wav"))
-					sim = MusicSimilarityUtil.getScoreByCompareFile(getResources().getAssets().open("coku1.wav") ,getResources().getAssets().open("coku2.wav"));
+					sim = MusicSimilarityUtil.getScoreByCompareFile(U.DATA_DIRECTORY + mFileName + ".wav" ,U.DATA_DIRECTORY + mFileName + ".wav");
 				}
-				catch(IOException e)
+				catch(Exception e)
 				{
 					e.printStackTrace();
 				}
@@ -126,48 +124,6 @@ public class MainActivity extends Activity
 		});
 	}
 
-	// void click ( View view )
-	// {
-	// switch ( view.getId () )
-	// {
-	// case R.id.switchbtn:
-	// if ( waveCanvas == null || ! waveCanvas.isRecording )
-	// {
-	// status.setText ( "录音中..." );
-	// switchBtn.setText ( "停止录音" );
-	// waveSfv.setVisibility ( View.VISIBLE );
-	// waveView.setVisibility ( View.INVISIBLE );
-	// initAudio ();
-	// }
-	// else
-	// {
-	// status.setText ( "停止录音" );
-	// switchBtn.setText ( "开始录音" );
-	// waveCanvas.Stop ();
-	// waveCanvas = null;
-	// initWaveView ();
-	// }
-	// break;
-	// case R.id.play:
-	// onPlay ( 0 );
-	// break;
-	// case R.id.socreaudio:
-	// float sim = 0;
-	// try
-	// {
-	// // new FileInputStream(new File(DATA_DIRECTORY + mFileName + ".wav"))
-	// sim = MusicSimilarityUtil.getScoreByCompareFile ( getResources
-	// ().getAssets ().open ( "coku1.wav" ), getResources ().getAssets ().open (
-	// "coku2.wav" ) );
-	// } catch ( IOException e )
-	// {
-	// e.printStackTrace ();
-	// }
-	// Toast.makeText ( MainActivity.this, sim + "", Toast.LENGTH_LONG ).show
-	// ();
-	// break;
-	// }
-	// }
 
 	private void initWaveView()
 	{
