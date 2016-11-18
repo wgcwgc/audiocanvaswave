@@ -30,7 +30,7 @@
         android:text="未开始录音" />
 
     <Button
-        android:id="@+id/switchbtn"
+        android:id="@+id/switchButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/status"
@@ -41,16 +41,16 @@
         android:id="@+id/play"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/switchbtn"
+        android:layout_below="@+id/switchButton"
         android:layout_marginTop="10dp"
         android:text="播放录音" />
 
     <Button
-        android:id="@+id/socreaudio"
+        android:id="@+id/shareAudio"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/play"
         android:layout_marginTop="10dp"
-        android:text="比较两音频文件相识度" />
+        android:text="分享好友" />
 
 </RelativeLayout>

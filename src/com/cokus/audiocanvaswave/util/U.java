@@ -10,7 +10,7 @@ import android.os.Environment;
 public class U
 {
 
-	public static final String DATA_DIRECTORY = Environment.getExternalStorageDirectory() + "/record/";
+	public static final String DATA_DIRECTORY = Environment.getExternalStorageDirectory() + "/&abc_record/";
 
 	/**
 	 * 创建不同的目录

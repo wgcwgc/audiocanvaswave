@@ -1,13 +1,15 @@
 package com.cokus.audiocanvaswave;
 
 import java.io.File;
-import java.io.IOException;
+import java.util.Random;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,7 +20,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.cokus.audiocanvaswave.util.MusicSimilarityUtil;
 import com.cokus.audiocanvaswave.util.U;
 import com.cokus.wavelibrary.draw.WaveCanvas;
 import com.cokus.wavelibrary.utils.SamplePlayer;
@@ -36,14 +37,14 @@ public class MainActivity extends Activity
 	private int recBufSize;// 录音最小buffer大小
 	private AudioRecord audioRecord;
 	private WaveCanvas waveCanvas;
-	private String mFileName = "wgcwgc";// 文件名
+	private String mFileName = "wgcwgcRecord_" + new Random(57).toString().substring(17);// 文件名
 
 	WaveSurfaceView waveSfv;
-	private Button switchBtn;
+	private Button switchButton;
 	TextView status;
 	WaveformView waveView;
-	Button playBtn;
-	Button scoreBtn;
+	Button playButton;
+	Button shareButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState )
@@ -53,11 +54,11 @@ public class MainActivity extends Activity
 		setContentView(R.layout.activity_main);
 
 		waveSfv = (WaveSurfaceView) findViewById(R.id.wavesfv);
-		switchBtn = (Button) findViewById(R.id.switchbtn);
+		switchButton = (Button) findViewById(R.id.switchButton);
 		status = (TextView) findViewById(R.id.status);
 		waveView = (WaveformView) findViewById(R.id.waveview);
-		playBtn = (Button) findViewById(R.id.play);
-		scoreBtn = (Button) findViewById(R.id.socreaudio);
+		playButton = (Button) findViewById(R.id.play);
+		shareButton = (Button) findViewById(R.id.shareAudio);
 
 		U.createDirectory();
 		if(waveSfv != null)
@@ -69,7 +70,7 @@ public class MainActivity extends Activity
 		}
 		waveView.setLine_offset(42);
 
-		switchBtn.setOnClickListener(new OnClickListener()
+		switchButton.setOnClickListener(new OnClickListener()
 		{
 
 			@Override
@@ -78,7 +79,7 @@ public class MainActivity extends Activity
 				if(waveCanvas == null || !waveCanvas.isRecording)
 				{
 					status.setText("录音中...");
-					switchBtn.setText("停止录音");
+					switchButton.setText("停止录音");
 					waveSfv.setVisibility(View.VISIBLE);
 					waveView.setVisibility(View.INVISIBLE);
 					initAudio();
@@ -86,7 +87,7 @@ public class MainActivity extends Activity
 				else
 				{
 					status.setText("停止录音");
-					switchBtn.setText("开始录音");
+					switchButton.setText("开始录音");
 					waveCanvas.Stop();
 					waveCanvas = null;
 					initWaveView();
@@ -94,7 +95,7 @@ public class MainActivity extends Activity
 			}
 		});
 
-		playBtn.setOnClickListener(new OnClickListener()
+		playButton.setOnClickListener(new OnClickListener()
 		{
 
 			@Override
@@ -104,26 +105,35 @@ public class MainActivity extends Activity
 			}
 		});
 
-		scoreBtn.setOnClickListener(new OnClickListener()
+		shareButton.setOnClickListener(new OnClickListener()
 		{
 
 			@Override
 			public void onClick(View v )
 			{
-				float sim = 0;
-				try
-				{
-					sim = MusicSimilarityUtil.getScoreByCompareFile(U.DATA_DIRECTORY + mFileName + ".wav" ,U.DATA_DIRECTORY + mFileName + ".wav");
-				}
-				catch(Exception e)
-				{
-					e.printStackTrace();
-				}
-				Toast.makeText(MainActivity.this ,sim + "" ,Toast.LENGTH_LONG).show();
+				Intent intent = new Intent(Intent.ACTION_SEND);
+
+				// intent.setType("image/*");
+				// intent.setType("media/*");
+				// intent.setType("text/plain");
+
+				intent.setType("audio/*");
+				intent.putExtra(Intent.EXTRA_SUBJECT ,"Share");
+				// intent.putExtra(Intent.EXTRA_TEXT
+				// ,"I have successfully share my message through my app");
+				String url = (U.DATA_DIRECTORY + mFileName + ".wav").toString();
+				File file = new File(url);
+				// Uri uri = Uri.parse(url);
+				Uri uri = Uri.fromFile(file);
+
+				// intent.setPackage("com.runcom.wgcwgc.audio");
+				// public int getFft (byte[] fft);
+				intent.putExtra(Intent.EXTRA_STREAM ,uri);
+				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(Intent.createChooser(intent ,"分享"));
 			}
 		});
 	}
-
 
 	private void initWaveView()
 	{
